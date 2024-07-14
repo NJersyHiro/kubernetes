@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:11.5-alpine
+# listens only on a UNIX socket (/var/run/postgresql)
+    command:
+      - -c 
+      - listen_addresses=""
+    network_mode: none
+    volumes:
+      - ./var-run-postgresql:/var/run/postgresql
+      - postgresql:/var/lib/postgresql/data
+  clair:
+    image: quay.io/coreos/clair:v2.0.9
+# sleep 3s to wait for postgres to be ready
+    entrypoint:
+      - sh
+      - -c
+      - sleep 3; /clair
+    networks:
+      - clair
+    ports:
+      - 127.0.0.1:6060:6060
+    volumes:
+      - ./var-run-postgresql:/var/run/postgresql
+      - ./etc-clair-config.yaml:/etc/clair/config.yaml
+networks:
+  clair:
+volumes:
+  postgresql:

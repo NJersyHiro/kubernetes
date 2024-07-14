@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+    - mysql_persistent_storage:/var/lib/mysql
+    - ./mysql-root-password:/run/secrets/mysql-root-password:ro
+    - ./mysql-wp-password:/run/secrets/mysql-wp-password:ro
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql-root-password
+      MYSQL_DATABASE: wp
+      MYSQL_USER: wp
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql-wp-password
+    networks:
+    - n0
+    restart: always
+  wordpress:
+    image: wordpress:5.2
+    volumes:
+    - ./mysql-wp-password:/run/secrets/mysql-wp-password:ro
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wp
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/mysql-wp-password
+    networks:
+    - n0
+    - n1
+    restart: always
+  nginx:
+    image: nginx:1.17-alpine
+    volumes:
+    - ./cert.pem:/etc/nginx/cert.pem:ro
+    - ./ssl.conf:/etc/nginx/conf.d/ssl.conf:ro
+    - ./key.pem:/run/secrets/key.pem:ro
+    ports:
+    - "443:443"
+    networks:
+    - n1
+    restart: always
+volumes:
+  mysql_persistent_storage: {}
+networks:
+  n0:
+  n1:

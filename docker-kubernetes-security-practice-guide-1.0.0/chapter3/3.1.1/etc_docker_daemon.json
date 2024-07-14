@@ -1,0 +1,6 @@
+{
+  "tlsverify": true,
+  "tlscacert": "/etc/docker/ca.pem",
+  "tlscert": "/etc/docker/cert.pem",
+  "tlskey": "/etc/docker/key.pem"
+}

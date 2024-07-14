@@ -1,0 +1,12 @@
+apiVersion: rbac.istio.io/v1alpha1
+kind: ServiceRoleBinding
+metadata:
+  name: viewers
+  namespace: test
+spec:
+  subjects:
+  # test Namespaceのsleep ServiceAccountをもつアプリケーションを指定
+  - user: cluster.local/ns/test/sa/sleep
+  roleRef:
+    kind: ServiceRole
+    name: viewer

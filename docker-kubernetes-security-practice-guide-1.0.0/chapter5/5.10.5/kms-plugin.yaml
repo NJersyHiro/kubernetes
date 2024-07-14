@@ -1,0 +1,7 @@
+keyNames:
+  - kube-secret-enc-key
+transitPath: /transit
+ca-cert: /etc/kubernetes/extra-config/vault-ca.crt
+addr: <VAULT Address>        # Vaultが起動しているアドレス (e.g., https://127.0.0.1:8201)
+roleID: <AppRole RoleID>     # 先程の手順で確認したRoleID
+secretID: <AppRole SecretID> # 先程の手順で確認したSecretID

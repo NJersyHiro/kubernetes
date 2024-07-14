@@ -1,0 +1,11 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+    - secrets
+    providers:
+    - aescbc:
+        keys:
+        - name: my-key-1
+          secret: <Base64 encoded value> # 生成したシークレットに置き換える
+    - identity: {}

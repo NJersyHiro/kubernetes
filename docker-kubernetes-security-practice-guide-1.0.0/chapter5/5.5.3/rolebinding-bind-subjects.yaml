@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: shopping-developers
+  namespace: shopping
+# ロールを1つだけ指定する
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole # またはRole
+  name: developer # ひもづけるロール名
+# ロールにひもづけるアカウントを指定する(複数指定可)
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User # またはGroup、ServiceAccount
+  name: bob
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: shopping-developer
+# shopping Namespaceに属するService Accountのdefault
+- kind: ServiceAccount
+  name: default
+  namespace: kube-system
+# shopping Namespaceに属する全Service Account
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts:shopping
+# クラスタ内の全Service Account
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts

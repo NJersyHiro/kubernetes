@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    component: backend
+  name: bob-blog
+  namespace: default
+spec:
+  tolerations:
+  # (a) Taintに対する演算子 (Equal or Exists)
+  - operator: Equal
+    effect: NoSchedule
+    key: special-node
+    value: for-bob
+  - effect: NoExecute
+    operator: Exists
+    key: node.kubernetes.io/not-ready
+  # (b) 300秒(5分)だけnode.kubernetes.io/not-readyのTaintを許容する tolerationSeconds: 300
+  - effect: NoExecute
+    operator: Exists
+    key: node.kubernetes.io/unreachable
+    tolerationSeconds: 300
+  containers:
+  - image: nginx
+    imagePullPolicy: Always
+    name: nginx
+  restartPolicy: Always

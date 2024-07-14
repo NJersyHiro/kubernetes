@@ -1,0 +1,4 @@
+Host dockerd.example.com
+  ControlMaster auto
+  ControlPath ~/.ssh/control-%C
+  ControlPersist yes

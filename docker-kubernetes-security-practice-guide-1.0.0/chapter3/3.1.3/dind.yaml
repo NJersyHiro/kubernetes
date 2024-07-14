@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dind
+spec:
+  containers:
+  - image: docker:19.03.3-dind
+    name: dind
+    command: ["dockerd"]
+    args:
+    - -H
+    - tcp://0.0.0.0:2376
+    - --tlsverify
+    - --tlscacert
+    - /certs/ca.pem
+    - --tlscert
+    - /certs/cert.pem
+    - --tlskey
+    - /certs/key.pem
+    securityContext:
+      privileged: true
+    ports:
+    - containerPort: 2376
+    volumeMounts:
+    - name: certs
+      readOnly: true
+      mountPath: /certs
+  volumes:
+  - name: certs
+    secret:
+      secretName: dind-daemon-certs

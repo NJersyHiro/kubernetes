@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-sa-disable-automount
+  namespace: default
+automountServiceAccountToken: false  # (a) ServiceAccountごとの無効化

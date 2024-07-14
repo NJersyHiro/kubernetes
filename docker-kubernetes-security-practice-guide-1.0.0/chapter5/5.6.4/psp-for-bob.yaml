@@ -1,0 +1,26 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: psp-for-bob
+  annotations:
+    # (a) アノテーションによるセキュリティプロファイルの設定
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default,runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+spec:
+  privileged: false
+  allowedUnsafeSysctls:
+  - 'kernel.msg*'
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+    - min: 1
+      max: 65535
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
+  seLinux:
+    rule: 'MustRunAs'
+  fsGroup:
+    rule: 'MustRunAs'

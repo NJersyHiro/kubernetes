@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      initContainers:
+      - name: git
+        image: alpine:3.10
+        command: ["sh", "-c", "apk add --no-cache git openssh-client && git clone git@git.example.com:example/foo.git /workspace"]
+        volumeMounts:
+        - name: workspace
+          mountPath: /workspace
+        - name: secret-ssh
+          mountPath: /root/.ssh
+          readOnly: true
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:v0.13.0
+        args: ["--destination=example.dkr.ecr.ap-northeast-1.amazonaws.com/foo"]
+        volumeMounts:
+        - name: workspace
+          mountPath: /workspace
+          readOnly: true
+        - name: secret-docker
+          mountPath: /kaniko/.docker
+          readOnly: true
+        - name: secret-aws
+          mountPath: /root/.aws
+          readOnly: true
+      volumes:
+      - name: workspace
+        emptyDir: {}
+      - name: secret-docker
+        secret:
+          secretName: kaniko-secret-docker
+      - name: secret-aws
+        secret:
+          secretName: kaniko-secret-aws

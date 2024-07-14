@@ -1,0 +1,20 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: bob-blog
+webhooks:
+- name: bob-blog-webhook.example.com # (a) APIサーバが呼び出すWebhookの指定
+  clientConfig:
+    caBundle: "c2FtcGxlLWNlcnQK"
+    service:
+      namespace: default
+      name: bob-blog
+      path: /webhook
+      port: 1234
+  # (b) Validating/Mutatingのタイムアウト値(秒)
+  timeoutSeconds: 2
+  # (c) 予期せぬエラーが発生した際のリクエスト可否 (Fail or Ignore)
+  failurePolicy: Fail
+  # (d) 副作用の有無 (Unknown, Some, None or NoneOnDryRun)
+  sideEffects: NoneOnDryRun  
+  admissionReviewVersions: ["v1beta1"]

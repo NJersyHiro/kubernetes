@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: apparmor-runtime-default
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/example: runtime/default
+spec:
+  containers:
+  - name: example
+    image: alpine:3.11
+    command: ["cat", "/proc/self/attr/current"]
+  restartPolicy: Never

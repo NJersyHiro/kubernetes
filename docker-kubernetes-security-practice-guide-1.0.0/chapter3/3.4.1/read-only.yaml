@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: read-only
+spec:
+  containers:
+  - name: example
+    image: alpine:3.11
+    command: ["sh", "-xc", "touch /this-fails; touch /tmp/this-succeeds"]
+    securityContext:
+      readOnlyRootFilesystem: true
+    volumeMounts:
+    - mountPath: /tmp
+      name: tmp
+  volumes:
+  - name: tmp
+    emptyDir: {}
+  restartPolicy: Never

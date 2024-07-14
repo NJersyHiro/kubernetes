@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: seccomp-runtime-default
+  annotations:
+    seccomp.security.alpha.kubernetes.io/pod: runtime/default
+spec:
+  containers:
+  - name: example
+    image: alpine:3.11
+    command: ["grep", "-i", "Seccomp", "/proc/self/status"]
+  restartPolicy: Never

@@ -1,0 +1,12 @@
+apiVersion: rbac.istio.io/v1alpha1
+kind: ServiceRoleBinding
+metadata:
+  name: viewers
+  namespace: default
+spec:
+  subjects:
+  # userのほかにもpropertiesによって指定することも可能
+  - user: cluster.local/ns/test/sa/foo
+  roleRef:
+    kind: ServiceRole
+    name: viewer

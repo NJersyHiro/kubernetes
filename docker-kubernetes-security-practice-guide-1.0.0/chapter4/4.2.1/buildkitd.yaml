@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: buildkitd
+  name: buildkitd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: buildkitd
+  template:
+    metadata:
+      labels:
+        app: buildkitd
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/buildkitd: unconfined
+        container.seccomp.security.alpha.kubernetes.io/buildkitd: unconfined
+    spec:
+      containers:
+      - name: buildkitd
+        image: moby/buildkit:v0.6.2-rootless
+        args:
+        - --addr
+        - tcp://0.0.0.0:1234
+        - --tlscacert
+        - /certs/ca.pem
+        - --tlscert
+        - /certs/cert.pem
+        - --tlskey
+        - /certs/key.pem
+        - --oci-worker-no-process-sandbox
+       ports:
+        - containerPort: 1234
+        volumeMounts:
+        - name: certs
+          readOnly: true
+          mountPath: /certs
+      volumes:
+      - name: certs
+        secret:
+          secretName: buildkit-daemon-certs

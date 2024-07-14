@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bob-blog
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bob-blog
+    spec:
+      affinity:
+        # (a) Anti-Affinityの設定
+        podAntiAffinity:
+          # (a-1) Hard Anti-Affinityの設定 (Soft Anti-Affinityも選択可能)
+          requiredDuringSchedulingIgnoredDuringExecution:
+          # (a-2) Nodeに配置済みPodのラベルセレクタ
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                # 演算子 (In, NotIn, Exists or DoesNotExist)
+                operator: In
+                values:
+                - payment
+                # (a-3) Nodeのトポロジを示すラベルキー
+            topologyKey: failure-domain.beta.kubernetes.io/zone # (b) Affinityの設定
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  selector:
+    matchLabels:
+      app: bob-blog
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate

@@ -1,0 +1,15 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+    - secrets
+    providers:
+    - kms:
+        name: vault
+        endpoint: unix:///var/run/kms-plugin/server.sock
+        cachesize: 100
+    - aescbc:
+        keys:
+        - name: my-key-1
+          secret: <BASE 64 ENCODED SECRET> # 5.10.4で作成した暗号化鍵
+    - identity: {}

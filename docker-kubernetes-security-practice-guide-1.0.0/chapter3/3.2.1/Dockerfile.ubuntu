@@ -1,0 +1,4 @@
+FROM ubuntu:18.04
+# -m: create the user's home directory
+RUN useradd -m exampleuser
+USER exampleuser

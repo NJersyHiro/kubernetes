@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: kind-worker2
+  annotations:
+    kubeadm.alpha.kubernetes.io/cri-socket: /run/containerd/containerd.sock
+    node.alpha.kubernetes.io/ttl: "0"
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: alice-worker
+    kubernetes.io/os: linux
+spec:
+  podCIDR: 10.244.1.0/24
+  taints:
+  # (a) Taintの効果 (PreferNoSchedule, NoSchedule or NoExecute)
+  - effect: NoSchedule
+    key: special-hw
+    value: for-bob
+  podCIDRs:
+  - 10.244.1.0/24

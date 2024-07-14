@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-security-context-sample
+  namespace: default
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: blog-container
+    securityContext:
+      runAsUser: 2000
+    image: busybox
+    imagePullPolicy: Always
+    command: ["sh", "-c", "echo \"I'm running as uid=$(id -u).\""]
+  restartPolicy: Never

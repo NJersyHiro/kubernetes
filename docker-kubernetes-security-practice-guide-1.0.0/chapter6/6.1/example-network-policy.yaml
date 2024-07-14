@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-policy
+  namespace: default
+spec:
+  # ポリシを適用するPodをselectorで指定
+  podSelector:
+  # IngressとEgressを両方またはいずれか指定
+  policyTypes:
+  - Ingress
+  - Egress
+  # 通信を許可する送信元ピアの情報とポート情報を定義
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.17.0.0/16
+    ports:
+    - protocol: TCP
+      port: 6379  
+  # 通信を許可する送信先ピアの情報とポート情報を定義
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24
+    ports:
+    - protocol: TCP
+      port: 5978

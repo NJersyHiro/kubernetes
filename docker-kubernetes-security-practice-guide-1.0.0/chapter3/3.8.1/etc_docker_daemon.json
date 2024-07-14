@@ -1,0 +1,8 @@
+{
+        "userns-remap": "default",
+        "no-new-privileges": true,
+        "log-driver": "fluentd",
+        "log-opts": {
+                "fluentd-address": "fluentd.example.com:24224"
+        }
+}

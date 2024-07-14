@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ping-group-range
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    sysctls:
+    - name: net.ipv4.ping_group_range
+      value: "0 1000"
+  containers:
+  - name: ping
+    image: centos:8.1.1911
+    command: ["ping", "www.example.com"]
+    securityContext:
+      capabilities:
+        drop:
+        - all

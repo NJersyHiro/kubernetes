@@ -1,0 +1,7 @@
+{
+  "runtimes": {
+    "kata": {
+      "path": "/usr/bin/kata-runtime"
+    }
+  }
+}

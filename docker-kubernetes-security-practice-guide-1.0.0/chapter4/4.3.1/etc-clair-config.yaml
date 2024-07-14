@@ -1,0 +1,5 @@
+clair:
+  database:
+    type: pgsql
+    options:
+      source: host=/var/run/postgresql user=postgres

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Config
+# APIサーバが利用する認可Webhookのコンテキスト current-context: webhook
+contexts:
+- context:
+    cluster: authz-webhook
+    user: api-server
+  name: webhook
+# APIサーバが呼び出す認可Webhookの設定
+clusters:
+- name: authz-webhook
+  cluster:
+    # 外部認証サーバを検証するためのCA
+    certificate-authority: /path/to/ca.pem
+    # 外部の認可サーバのURL(プロトコルはHTTPS)
+    server: https://bob-webhook.example.com/authz
+# APIサーバが認可Webhookとの通信に利用するクライアント証明の設定
+users:
+- name: api-server user:
+  client-certificate: /path/to/cert.pem
+  client-key: /path/to/key.pem

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: "2020-01-18T09:51:48Z"
+  name: bob-blog
+  namespace: default
+  resourceVersion: "2442"
+  selfLink: /api/v1/namespaces/default/serviceaccounts/bob-blog
+  uid: b70d8bbe-2605-4c4b-a34f-c8cdc239f9a0
+secrets:
+- name: bob-blog-token-86blr

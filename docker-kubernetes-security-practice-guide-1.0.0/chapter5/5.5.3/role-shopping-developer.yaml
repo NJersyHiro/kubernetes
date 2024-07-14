@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: shopping-developer
+  namespace: shopping
+rules:
+- verbs: ["get", "list", "watch"]
+  apiGroups: [""] # 空はCoreAPIグループを表す
+  resources: ["pods", "pods/exec"]
+- verbs: ["*"] # 全ての操作を許可する
+  apiGroups: ["extensions", "apps"] # CoreAPIグループ以外は明示的に指定する
+  resources: ["deployments"]
+- verbs: ["use"]
+  apiGroups: ["extensions"]
+  resources: ["podsecuritypolicy"]
+  resourceNames: ["psp-for-shopping"] # オプションでリソース名も制限できる

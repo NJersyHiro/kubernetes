@@ -1,0 +1,12 @@
+apiVersion: config.istio.io/v1alpha2
+kind: QuotaSpec
+metadata:
+  name: my-quotaspec
+  namespace: istio-system
+spec:
+  rules:
+  - quotas:
+    # カウンタの増加数を定義
+    - charge: 1
+      # 増加数のルールを適用する対象のinstanceを指定
+      quota: my-instance

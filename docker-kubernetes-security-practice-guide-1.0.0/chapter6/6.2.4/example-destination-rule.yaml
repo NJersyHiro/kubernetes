@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: test-rule
+spec:
+  host: httpbin
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    # upstream通信のtcpおよびhttp接続に関する設定
+    connectionPool:
+      tcp:
+        # 宛先に対する最大接続数。デフォルトは1024。
+        maxConnections: 1
+      http:
+        # 宛先に対する接続待ちの最大数
+        http1MaxPendingRequests: 10
+        # Keep-Alive通信におけるリクエストの最大数
+        maxRequestsPerConnection: 1  # 1 はkeep-alive無効を意味する
+    # 異常な宛先を検知してコネクションプールから排除するための設定
+    outlierDetection:
+      # 宛先が継続して異常状態であるとみなされるエラーのカウント数
+      # 502, 503, 504 のステータスコードがカウント対象となる 
+      consecutiveErrors: 1
+      # 異常検出の間隔。デフォルトは10s。
+      interval: 5s
+      # ホストが排除されている最小時間。デフォルトは30s。
+      baseEjectionTime: 30s
+      # プールからホストを排除する割合。デフォルトは10%。
+      maxEjectionPercent: 100
+      # 異常検出が有効になる健全なホストの割合。
+      # これを下回ると異常検出が無効になり正常・異常すべてのホストに通信をバランシングする
+      minHealthPercent: 0 # 0%は最小値の設定を無効にする

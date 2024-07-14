@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: run-as-user
+  labels:
+    app: run-as-user
+spec:
+  selector:
+    matchLabels:
+      app: run-as-user
+  template:
+    metadata:
+      labels:
+        app: run-as-user
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - name: example
+        image: alpine:3.11
+        command: ["sh", "-exc", "id; exec sleep infinity"]

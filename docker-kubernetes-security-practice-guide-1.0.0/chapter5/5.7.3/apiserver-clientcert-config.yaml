@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Config
+users:
+# Kubernetes上のWebhookの場合はService名を記述する
+# ワイルドカード("*")も利用できる
+- name: 'bob-blog-webhook.default.svc'
+  user:
+    # X509クライアント証明書
+    client-certificate-data: <PEM形式の証明書>
+    client-key-data: <PEM形式の鍵>
+# 外部Webhookの場合はDNS名を記述する
+- name: '*.bob-webhook.example.com'
+  user:
+    # Base64
+    password: <パスワード>
+    username: <ユーザ名>
+# "*" は全てのWebhookにマッチする
+- name: '*'
+  user:
+    token: <Token>

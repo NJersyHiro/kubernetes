@@ -1,0 +1,7 @@
+{
+  "runtimes": {
+    "gvisor": {
+      "path": "/usr/bin/runsc"
+    }
+  }
+}

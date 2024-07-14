@@ -1,0 +1,13 @@
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: quota
+  namespace: istio-system
+spec:
+  # ログインしていない場合に有効になるルール
+  match: match(request.headers["cookie"], "user=*") == false
+  actions:
+  # このルールで有効にするhandlerとinstanceの組み合わせを定義
+  - handler: my-memquota
+    instances:
+    - my-instance

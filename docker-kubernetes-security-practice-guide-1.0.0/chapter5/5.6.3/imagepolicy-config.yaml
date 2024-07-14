@@ -1,0 +1,11 @@
+imagePolicy:
+  # kubeconfig形式のWebhookサーバ設定
+  kubeConfigFile: /path/to/webhook-config
+  # allowした結果をcacheする時間
+  allowTTL: 50
+  # denyした結果をcacheする時間
+  denyTTL: 50
+  # 失敗時にRetryするまでの待ち時間
+  retryBackoff: 500
+  # Webhookサーバへの通信エラーなどが発生した場合にImageを許可するかどうか
+  defaultAllow: true

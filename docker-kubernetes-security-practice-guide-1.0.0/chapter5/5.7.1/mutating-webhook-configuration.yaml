@@ -1,0 +1,34 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: bob-webhook
+webhooks:
+- name: bob-webhook.example.com
+  # (a) Group/Versionが異なるリソースを処理対象とするか (Equivalent or Exact)
+  matchPolicy: Equivalent
+  # (b) ラベルセレクタによるNamespaceの制限
+  namespaceSelector:
+    matchExpressions:
+    - key: runlevel
+      operator: NotIn
+      values: ["kube-system"]
+  # (c) ラベルセレクタによるリソースの制限
+  objectSelector:
+    matchLabels:
+      app: bob-blog
+  # (d) 処理対象とするリソースの指定
+  rules:
+    # 操作方法 (CREATE, UPDATE, DELETE or CONNECT)
+  - operations: ["CREATE", "UPDATE"]
+    # APIグループ ("<group>", "": コアAPI or "*": 全API)
+    apiGroups: ["apps"]
+    # APIバージョン ("<version>"or "*": 全バージョン)
+    apiVersions: ["v1"]
+    # 対象リソース ("<resource>", "<resource>/<subresource>", "*", "<resource>/*", "*/*"or "*/<subresource>")
+    resources: ["deployments"]
+    # リソースのスコープ (Cluster, Namespaced or "*")
+    scope: "Namespaced"
+  # 再実行の要不要 (Never or IfNeeded)
+  reinvocationPolicy: IfNeeded
+  clientConfig:
+    url: "https://bob-webhook.example.com"

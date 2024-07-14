@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: langflow-deployment
+  labels:
+    app: langflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: langflow
+  template:
+    metadata:
+      labels:
+        app: langflow
+    spec:
+      containers:
+      - name: langflow
+        image: langflowai/langflow:latest
+        ports:
+        - containerPort: 7860
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://user:password@vector:5432/database"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: langflow-service
+spec:
+  selector:
+    app: langflow
+  ports:
+    - protocol: TCP
+      port: 7860
+      targetPort: 7860 # コンテナ内のポートに応じて変更します
+  type: ClusterIP # クラウドプロバイダーによってはNodePortやClusterIPに変更することもできます

@@ -1,0 +1,25 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  # 暗号化したいKubernetesのリソース名を指定する(resource or resource.group)
+  - resources:
+    - secrets
+    # 暗号化プロバイダの設定
+    providers:
+    # 一番先頭のプロバイダが暗号化に使われる
+    - aescbc:
+        # 暗号化/復号化に使われる鍵情報のリスト
+        keys:
+        # 鍵を識別するための名前
+        - name: my-key-1
+        # Base64エンコードされた共通鍵
+          secret: Loo3ozeFmWvJgyiOO7E59uvi53T9pcwiHq7UxxO37kM=
+        # 2番目以降は復号化で利用される。通常はローテーション後の共通鍵。
+        - name: my-key-2
+          secret: jzE7Tz+eITZQOMp85Ee7NlwkEvynB/1ldPIvG2l9MG0=
+    # 2番目以降のプロバイダは復号化でのみ使われる
+    - secretbox:
+        keys:
+        - name: my-secretbox-key
+          secret: bPqkms5LCGBpwtIQ1GJumZL0g4CfSS8D4San8I3Foto=
+    - identity: {}

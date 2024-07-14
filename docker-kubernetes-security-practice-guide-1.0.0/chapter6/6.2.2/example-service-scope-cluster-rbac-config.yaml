@@ -1,0 +1,9 @@
+apiVersion: rbac.istio.io/v1alpha1
+kind: ClusterRbacConfig
+metadata:
+  name: default
+spec:
+  # inclusionで定義した条件にマッチするNamespaceやServiceで認可を有効にする
+  mode: ON_WITH_INCLUSION  # ON, OFF, ON_WITH_INCLUSION, ON_WITH_EXCLUSIONを指定できる
+  inclusion:
+    services: ["my-service.test.svc.cluster.local"]

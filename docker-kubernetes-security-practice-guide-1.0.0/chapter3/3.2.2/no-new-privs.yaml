@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: no-new-privs
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  containers:
+  - name: ping
+    image: centos:8.1.1911
+    command: ["ping", "www.example.com"]
+    securityContext:
+      allowPrivilegeEscalation: false
+  restartPolicy: Never

@@ -1,0 +1,23 @@
+apiVersion: config.istio.io/v1alpha2
+kind: handler
+metadata:
+  name: my-memquota
+  namespace: istio-system
+spec:
+  # 利用するAdaptorを指定
+  compiledAdapter: memquota
+  params:
+    quotas:
+    # quota templateを指定
+    - name: my-instance.instance.istio-system
+      # デフォルトのquota設定。この場合5秒間にカウンタが100を超えたら以降の通信は遮断する。
+      # 通信あたりのカウンタ増加数はquotaspecにより決まる。
+      maxAmount: 100
+      validDuration: 5s
+      # instanceリソースで定義した内容を使ってより細かい条件を指定可能
+      overrides:
+      - dimensions:
+          # instanceで定義した要素のdestinationの値がmy-apiの場合は条件を上書き
+          destination: my-api
+        maxAmount: 1
+        validDuration: 5s

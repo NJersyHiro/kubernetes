@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bob-blog
+  namespace: default
+spec:
+  affinity:
+    nodeAffinity:
+      # (a) Hard Affinityの設定
+      requiredDuringSchedulingIgnoredDuringExecution:
+        # (a-1) 条件リスト(OR条件)
+        nodeSelectorTerms:
+        # ラベルのマッチ条件リスト(AND条件)
+        - matchExpressions:
+          - key: failure-domain.beta.kubernetes.io/zone
+            # 演算子 (In, NotIn, Exists, DoesNotExist, Gt or Lt)
+            operator: In
+            values:
+            - zone1
+          - key: service
+            operator: In
+            values:
+            - shopping
+      # (b) Soft Affinityの設定 - 優先度つき条件リスト
+      preferredDuringSchedulingIgnoredDuringExecution:
+        # 優先度 (1-100)
+      - weight: 20
+        preference:
+          matchExpressions:
+          - key: node-priority
+            operator: Gt
+            values:
+            - "3"
+  containers:
+  - image: nginx
+    imagePullPolicy: Always
+    name: nginx
+  restartPolicy: Always

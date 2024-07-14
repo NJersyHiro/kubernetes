@@ -1,0 +1,13 @@
+apiVersion: config.istio.io/v1alpha2
+kind: instance
+metadata:
+  name: my-instance
+  namespace: istio-system
+spec:
+  compiledTemplate: quota
+  params:
+    # 任意の名前の要素を定義
+    dimensions:
+      # 利用できるattributeは注釈に記載のURLを参照してください
+      source: source.name | "unknown"
+      destination: destination.service.name | "unknown"

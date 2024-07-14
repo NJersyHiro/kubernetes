@@ -1,0 +1,17 @@
+apiVersion: rbac.istio.io/v1alpha1
+kind: ServiceRole
+metadata:
+  name: viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["*cluster.local"]
+    paths: ["*"]
+    methods: ["GET", "HEAD"]
+    constraints:
+    # リクエストヘッダの内容による制御
+    - key: request.headers[version]
+      values: ["v1", "v2"]
+    #  Labelによる制御
+    - key: "destination.labels[version]"
+      values: ["v1", "v2"]

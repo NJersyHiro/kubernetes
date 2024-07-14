@@ -1,0 +1,10 @@
+-w /usr/bin/dockerd -p wa -k cis
+# -w /var/lib/docker -p wa -k cis
+-w /etc/docker -p wa -k cis
+-w /usr/lib/systemd/system/docker.service -p wa -k cis
+-w /usr/lib/systemd/system/docker.socket -p wa -k cis
+-w /etc/default/docker -p wa -k cis
+-w /etc/sysconfig/docker -p wa -k cis
+-w /etc/docker/daemon.json -p wa -k cis
+-w /usr/bin/containerd -p wa -k cis
+-w /usr/sbin/runc -p wa -k cis

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: run-as-user
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  containers:
+  - name: example
+    image: alpine:3.11
+    command: ["sh", "-exc", "id; exec sleep infinity"]
